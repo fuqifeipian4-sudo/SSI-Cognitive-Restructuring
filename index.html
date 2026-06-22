@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Columbia University - Cognitive Restructuring Activity</title>
+    <style>
+        :root {
+            --deep-blue: #1e3d59;
+            --ocean-blue: #3a8da8;
+            --button-color: #24587a;
+        }
+
+        /* Load custom font */
+        @font-face {
+            font-family: 'Slow Play';
+            src: url('slow-play.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Slow Play', system-ui, -apple-system, sans-serif;
+            letter-spacing: 0.02em;
+        }
+
+        body {
+            background-image: url('sea-background.jpg');
+            background-size: auto 250%;
+            background-position: center 0%;
+            background-repeat: repeat-x;
+            background-attachment: fixed;
+            min-height: 100vh;
+            color: var(--deep-blue);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            transition: background-position 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 850px;
+            background: none;
+            padding: 20px;
+            min-height: 550px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            z-index: 2;
+        }
+
+        .header-logo-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            width: 100%;
+        }
+
+        .univ-logo {
+            max-width: 280px;
+            height: auto;
+            filter: invert(19%) sepia(27%) saturate(1638%) hue-rotate(193deg) brightness(93%) contrast(93%);
+        }
+
+        /* Slide Transition Animations Engine */
+        .screen {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            flex-grow: 1;
+            opacity: 0;
+        }
+
+        .screen.active {
+            display: flex;
+            animation: slideInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .screen.slide-out-up {
+            display: flex;
+            animation: slideOutUp 0.35s cubic-bezier(0.5, 0, 0.2, 1) forwards;
+        }
+
+        @keyframes slideInUp {
+            from { opacity: 0; transform: scale(0.98) translateY(45px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        @keyframes slideOutUp {
+            from { opacity: 1; transform: scale(1) translateY(0); }
+            to { opacity: 0; transform: scale(0.98) translateY(-45px); }
+        }
+
+        /* Textbox Cards */
+        .info-card {
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid rgba(58,141,168,0.2);
+            padding: 32px 40px;
+            margin: 15px auto;
+            border-radius: 14px;
+            font-size: 1.35rem;
+            text-align: center;
+            line-height: 1.6;
+            color: var(--deep-blue);
+            width: 100%;
+            max-width: 740px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+        }
+
+        .info-card h2, h2 {
+            font-size: 1.8rem; 
+            margin-bottom: 20px;
+            line-height: 1.4;
+            text-align: center;
+            color: var(--deep-blue);
+        }
+
+        /* Review Formatting */
+        .review-item {
+            font-size: 1.25rem;
+            text-align: left;
+            line-height: 1.5;
+            color: var(--deep-blue);
+            margin-bottom: 22px;
+        }
+
+        .review-item strong {
+            color: var(--ocean-blue);
+            font-size: 1.35rem;
+        }
+
+        .conclusion-text {
+            font-size: 1.4rem;
+            text-align: center;
+            line-height: 1.6;
+            color: var(--deep-blue);
+            margin-bottom: 18px;
+        }
+
+        /* Buttons & Forms */
+        .btn-container {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            background-color: var(--button-color);
+            color: white;
+            border: none;
+            padding: 14px 40px;
+            font-size: 1.15rem; 
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 4px 12px rgba(36,88,122,0.2);
+        }
+
+        button:hover {
+            background-color: var(--ocean-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(58,141,168,0.3);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--ocean-blue);
+            border: 2px solid var(--ocean-blue);
+            box-shadow: none;
+        }
+        
+        .btn-secondary:hover {
+            background-color: var(--ocean-blue);
+            color: white;
+        }
+
+        .text-input {
+            width: 100%;
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid rgba(58,141,168,0.6);
+            font-size: 1.25rem; 
+            color: var(--deep-blue);
+            margin-top: 15px;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+            resize: vertical;
+            background: rgba(255, 255, 255, 0.9);
+            transition: border-color 0.2s;
+        }
+
+        .text-input:focus {
+            outline: none;
+            border-color: var(--deep-blue);
+        }
+
+        /* Drag and Drop / Fish UI */
+        .game-container {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            margin-top: 10px;
+        }
+
+        .buckets-wrapper {
+            display: flex;
+            justify-content: center;
+            gap: 70px;
+        }
+
+        .bucket-container {
+            position: relative;
+            width: 195px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .bucket-label {
+            font-size: 1.4rem;
+            margin-bottom: 12px;
+            color: var(--deep-blue);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .bucket-dropzone {
+            position: relative;
+            width: 100%;
+            height: 195px;
+        }
+
+        .bucket-base {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .bucket-items {
+            position: absolute;
+            top: 35px;
+            left: 15px;
+            width: 165px;
+            height: 135px;
+            z-index: 2;
+            display: flex;
+            flex-wrap: wrap;
+            align-content: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .bucket-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            z-index: 3;
+            pointer-events: none;
+        }
+
+        .bucket-dropzone.drag-over .bucket-base {
+            filter: brightness(1.08) drop-shadow(0 0 12px rgba(58,141,168,0.5));
+        }
+
+        .fish-pool {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            justify-content: center;
+            min-height: 140px;
+            padding: 24px;
+            background: rgba(255, 255, 255, 0.4);
+            border: 2px dashed rgba(30,61,89,0.2);
+            border-radius: 12px;
+            align-items: center;
+            transition: background-color 0.2s ease;
+        }
+
+        .fish-pool.drag-over {
+            background: rgba(255, 255, 255, 0.6);
+        }
+
+        .fish {
+            position: relative;
+            width: 160px;
+            height: 88px;
+            cursor: grab;
+            user-select: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 18px;
+            text-align: center;
+            /* READABLE SAN-SERIF FONT FOR ALL FISH */
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-weight: 600;
+            font-size: 0.85rem; 
+            letter-spacing: normal;
+            line-height: 1.2;
+            color: #ffffff;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8), -1px -1px 2px rgba(0, 0, 0, 0.8);
+            transition: transform 0.15s ease, width 0.2s, height 0.2s;
+        }
+
+        .fish:active {
+            cursor: grabbing;
+        }
+
+        .fish.dragged {
+            opacity: 0.25;
+        }
+
+        .bucket-items .fish {
+            width: 72px;
+            height: 42px;
+            font-size: 0px !important;
+            text-shadow: none !important;
+            padding: 0;
+        }
+
+        /* Review formatting rules */
+        .review-meta {
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 1.4rem;
+            color: var(--deep-blue);
+            line-height: 1.6;
+            border-bottom: 2px dashed rgba(30,61,89,0.15);
+            padding-bottom: 15px;
+        }
+        
+        .dynamic-quote {
+            color: var(--button-color);
+        }
+
+        .spacer {
+            height: 25px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header-logo-container">
+            <img src="Columbia_University_Logo-white copy.png" alt="Columbia University Logo" class="univ-logo">
+        </div>
+        
+        <div id="screen-intro-1" class="screen active">
+            <div class="info-card">
+                Our thoughts impact how we feel, and sometimes our thoughts are negative and make us feel upset.
+            </div>
+            <div class="btn-container">
+                <button onclick="nextScreen('screen-intro-2')">Continue</button>
+            </div>
+        </div>
+
+        <div id="screen-intro-2" class="screen">
+            <div class="info-card">
+                But, our thoughts aren't always accurate interpretations of a situation.
+            </div>
+            <div class="btn-container">
+                <button onclick="nextScreen('screen-intro-3')">Continue</button>
+            </div>
+        </div>
+
+        <div id="screen-intro-3" class="screen">
+            <div class="info-card">
+                This activity will teach you how to determine whether an upsetting thought is actually accurate.
+            </div>
+            <div class="btn-container">
+                <button onclick="nextScreen('screen-branch')">Get Started</button>
+            </div>
+        </div>
+
+        <div id="screen-branch" class="screen">
+            <div class="info-card">
+                <h2>Let's start with an example. Would you prefer an example about a social situation or academics?</h2>
+            </div>
+            <div class="btn-container">
+                <button onclick="selectBranch('social')">Social Situation</button>
+                <button onclick="selectBranch('academics')">Academics</button>
+            </div>
+        </div>
+
+        <div id="screen-context-1" class="screen">
+            <div id="context-text-1" class="info-card"></div>
+            <div class="btn-container">
+                <button onclick="nextScreen('screen-context-2')">Continue</button>
+            </div>
+        </div>
+
+        <div id="screen-context-2" class="screen">
+            <div id="context-text-2" class="info-card"></div>
+            <div class="btn-container">
+                <button onclick="nextScreen('screen-context-3')">Continue</button>
+            </div>
+        </div>
+
+        <div id="screen-context-3" class="screen">
+            <div class="info-card">
+                Checking the evidence related to our negative thoughts is a simple way to help us see situations more accurately and make them feel less overwhelming. Without checking the evidence, something small can lead you down a path of negativity.
+            </div>
+            <div class="btn-container">
+                <button onclick="nextScreen('screen-game')">Let's Practice</button>
+            </div>
+        </div>
+
+        <div id="screen-game" class="screen">
+            <div id="game-prompt" class="info-card"></div>
+            
+            <div class="game-container">
+                <div class="buckets-wrapper">
+                    <div class="bucket-container">
+                        <div class="bucket-label">Supports</div>
+                        <div class="bucket-dropzone" id="dropzone-supports" data-bucket="supports">
+                            <img src="support-bucket-base.png" class="bucket-base" alt="Bucket Base">
+                            <div class="bucket-items"></div>
+                            <img src="support-bucket-overlay.png" class="bucket-overlay" alt="Bucket Front">
+                        </div>
+                    </div>
+
+                    <div class="bucket-container">
+                        <div class="bucket-label">Opposes</div>
+                        <div class="bucket-dropzone" id="dropzone-opposes" data-bucket="opposes">
+                            <img src="oppose-bucket-base.png" class="bucket-base" alt="Bucket Base">
+                            <div class="bucket-items"></div>
+                            <img src="oppose-bucket-overlay.png" class="bucket-overlay" alt="Bucket Front">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fish-pool" id="fish-pool"></div>
+            </div>
+
+            <div class="btn-container">
+                <button onclick="evaluateSorting()">Submit Answers</button>
+            </div>
+        </div>
+
+        <div id="screen-review" class="screen">
+            <div class="info-card">
+                <h2>Let's review!</h2>
+                <div class="review-meta">
+                    <p>Situation: <span id="review-situation"></span></p>
+                    <p>Thought: "<span id="review-thought"></span>"</p>
+                </div>
+                <div id="review-text-container"></div>
+            </div>
+            <div class="btn-container">
+                <button onclick="nextScreen('screen-reframe')">Continue</button>
+            </div>
+        </div>
+
+        <div id="screen-reframe" class="screen">
+            <div class="info-card" id="reframe-conclusion"></div>
+            <div class="btn-container">
+                <button onclick="nextScreen('screen-personal-intro')">Continue to Personal Experience</button>
+            </div>
+        </div>
+
+        <div id="screen-personal-intro" class="screen">
+            <div class="info-card">
+                Now let's check the evidence again with a personal experience.
+            </div>
+            <div class="btn-container">
+                <button onclick="nextScreen('screen-q3')">Continue</button>
+            </div>
+        </div>
+
+        <div id="screen-q3" class="screen">
+            <div class="info-card">
+                <h2>What's a situation in the past week that made you upset?</h2>
+                <textarea id="input-q3" class="text-input" rows="3" placeholder="Type your situation here..."></textarea>
+            </div>
+            <div class="btn-container">
+                <button onclick="validateAndNext('input-q3', 'screen-q4')">Continue</button>
+            </div>
+        </div>
+
+        <div id="screen-q4" class="screen">
+            <div class="info-card">
+                <h2>What thought went through your mind?</h2>
+                <textarea id="input-q4" class="text-input" rows="3" placeholder="Type your thought here..."></textarea>
+            </div>
+            <div class="btn-container">
+                <button onclick="validateAndNext('input-q4', 'screen-q5')">Continue</button>
+            </div>
+        </div>
+
+        <div id="screen-q5" class="screen">
+            <div class="info-card">
+                <h2>How did this thought make you feel?</h2>
+                <textarea id="input-q5" class="text-input" rows="2" placeholder="e.g., Anxious, Sad, Frustrated..."></textarea>
+                <button class="btn-secondary" onclick="alert('Some examples of feelings:\n• Sad\n• Angry\n• Anxious\n• Frustrated\n• Lonely\n• Overwhelmed')">Click for help labeling how you feel</button>
+            </div>
+            <div class="btn-container">
+                <button onclick="preparePersonalGame()">Continue</button>
+            </div>
+        </div>
+
+        <div id="screen-q6" class="screen">
+            <div class="info-card">
+                <p style="font-size: 1.3rem; margin-bottom: 10px;">Here is your thought: <span class="dynamic-quote">"<span id="display-thought-1"></span>"</span></p>
+                <h2>First, list the evidence that <u style="color: #d32f2f;">supports</u> this thought.</h2>
+                <p style="font-size: 1.2rem;">Write as many as you can think of! Make sure your evidence is based on facts, not emotions.</p>
+                
+                <div style="margin-top: 20px;">
+                    <input type="text" id="input-support-fish" class="text-input" placeholder="Type supporting evidence...">
+                    <button class="btn-secondary" onclick="addPersonalFish('support')" style="margin-top: 10px;">+ Add Fish (Max 5)</button>
+                </div>
+            </div>
+
+            <div class="fish-pool" id="pool-support-fish"></div>
+
+            <div class="btn-container">
+                <button onclick="nextScreen('screen-q7')">Continue</button>
+            </div>
+        </div>
+
+        <div id="screen-q7" class="screen">
+            <div class="info-card">
+                <p style="font-size: 1.3rem; margin-bottom: 10px;">Here is your thought: <span class="dynamic-quote">"<span id="display-thought-2"></span>"</span></p>
+                <h2>Now list the evidence that <u style="color: #388e3c;">opposes</u> this thought.</h2>
+                
+                <div style="font-size: 1.2rem; text-align: left; line-height: 1.4; border-left: 4px solid var(--ocean-blue); padding-left: 15px; margin: 15px 0;">
+                    <p>Ask yourself these questions:</p>
+                    <ul style="margin-left: 20px; margin-top: 5px;">
+                        <li>Is there any other way of looking at this situation?</li>
+                        <li>What would you tell a friend who had the thought?</li>
+                        <li>Am I overestimating (or underestimating) how much control and responsibility I have?</li>
+                    </ul>
+                </div>
+                
+                <p style="font-size: 1.1rem; margin-top: 10px;">It's harder for our brains to come up with evidence opposing our thoughts. That doesn't mean there isn't any; it's just harder to think of it. Write as many as you can think of!</p>
+
+                <div style="margin-top: 20px;">
+                    <input type="text" id="input-oppose-fish" class="text-input" placeholder="Type opposing evidence...">
+                    <button class="btn-secondary" onclick="addPersonalFish('oppose')" style="margin-top: 10px;">+ Add Fish (Max 5)</button>
+                </div>
+            </div>
+
+            <div class="fish-pool" id="pool-oppose-fish"></div>
+
+            <div class="btn-container">
+                <button onclick="calculatePersonalResults()">Review Evidence</button>
+            </div>
+        </div>
+
+        <div id="screen-supports-intro" class="screen">
+            <div class="info-card">
+                <h2>You came up with more evidence supporting the thought than opposing it.</h2>
+                <div class="buckets-wrapper" style="margin-top: 25px;">
+                    <div style="flex: 1;">
+                        <h3 style="color: #d32f2f;">Supports</h3>
+                        <div class="fish-pool" id="display-supports-1" style="min-height: 80px; padding: 10px;"></div>
+                    </div>
+                    <div style="flex: 1;">
+                        <h3 style="color: #388e3c;">Opposes</h3>
+                        <div class="fish-pool" id="display-opposes-1" style="min-height: 80px; padding: 10px;"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="btn-container">
+                <button onclick="nextScreen('screen-supports-q8')">Continue</button>
+            </div>
+        </div>
+
+        <div id="screen-supports-q8" class="screen">
+            <div class="info-card">
+                <h2>Look at the evidence you provided. Does it fully support the thought?</h2>
+            </div>
+            <div class="btn-container">
+                <button onclick="nextScreen('screen-supports-yes')">Yes</button>
+                <button onclick="nextScreen('screen-outro')">No</button>
+            </div>
+        </div>
+
+        <div id="screen-supports-yes" class="screen">
+            <div class="info-card" style="text-align: left;">
+                <h2 style="text-align: center;">Your negative thought isn't necessarily a reflection of your character or accurate on the whole.</h2>
+                <p>Here are some things you can do if the evidence supports your thought:</p>
+                <ul style="margin-left: 25px; margin-top: 10px; line-height: 1.6;">
+                    <li>Change your own behavior (e.g., consider putting your energy towards friends who support you)</li>
+                    <li>Change how you're thinking about the thought (e.g., "maybe they don't like me, but that's a reflection of their character, not mine")</li>
+                    <li>Even if the evidence supports the negative thought, remind yourself that it might not be as bad as you think. You've made it through before, you'll make it through again.</li>
+                    <li>If you can't change the situation, adjust your expectations of yourself, other people, or the world around you so you can be kinder to yourself.</li>
+                </ul>
+            </div>
+            <div class="btn-container">
+                <button onclick="nextScreen('screen-supports-adjust')">Continue</button>
+            </div>
+        </div>
+
+        <div id="screen-supports-adjust" class="screen">
+            <div class="info-card">
+                <h2>What adjustment makes the most sense for your situation?</h2>
+                <textarea id="input-adjustment" class="text-input" rows="3" placeholder="Type your adjustment..."></textarea>
+            </div>
+            <div class="btn-container">
+                <button onclick="nextScreen('screen-outro')">Continue</button>
+            </div>
+        </div>
+
+        <div id="screen-equal" class="screen">
+            <div class="info-card">
+                <h2>You came up with an equal amount of evidence that supports and opposes the thought.</h2>
+                <div class="buckets-wrapper" style="margin-top: 25px;">
+                    <div style="flex: 1;">
+                        <h3 style="color: #d32f2f;">Supports</h3>
+                        <div class="fish-pool" id="display-supports-2" style="min-height: 80px; padding: 10px;"></div>
+                    </div>
+                    <div style="flex: 1;">
+                        <h3 style="color: #388e3c;">Opposes</h3>
+                        <div class="fish-pool" id="display-opposes-2" style="min-height: 80px; padding: 10px;"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="btn-container">
+                <button onclick="nextScreen('screen-outro')">Continue</button>
+            </div>
+        </div>
+
+        <div id="screen-opposes" class="screen">
+            <div class="info-card">
+                <h2>You came up with more evidence opposing the thought than supporting it.</h2>
+                <div class="buckets-wrapper" style="margin-top: 25px;">
+                    <div style="flex: 1;">
+                        <h3 style="color: #d32f2f;">Supports</h3>
+                        <div class="fish-pool" id="display-supports-3" style="min-height: 80px; padding: 10px;"></div>
+                    </div>
+                    <div style="flex: 1;">
+                        <h3 style="color: #388e3c;">Opposes</h3>
+                        <div class="fish-pool" id="display-opposes-3" style="min-height: 80px; padding: 10px;"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="btn-container">
+                <button onclick="nextScreen('screen-outro')">Continue</button>
+            </div>
+        </div>
+
+        <div id="screen-outro" class="screen">
+            <div class="info-card">
+                <p>Like any new skill, checking the evidence takes practice. It can be hard when you start, but you'll get better the more you do it.</p>
+                <p style="margin-top: 20px;">You can check the evidence anytime you're having negative thoughts - an effective first step to feeling better!</p>
+            </div>
+            <div class="btn-container">
+                <button onclick="nextScreen('screen-email')">Continue</button>
+            </div>
+        </div>
+
+        <div id="screen-email" class="screen">
+            <div class="info-card">
+                <h2>Enter your email below to receive a copy of your responses.</h2>
+                <p style="font-size: 1.2rem;">We recommend you do this so you can refer back to them. Your email will only be used to email your responses (we promise!).</p>
+                <input type="email" id="input-email" class="text-input" placeholder="Your email address...">
+            </div>
+            <div class="btn-container">
+                <button onclick="alert('Thank you for completing the Cognitive Restructuring Activity!')">Submit & Finish</button>
+            </div>
+        </div>
+
+        <div class="spacer"></div>
+    </div>
+
+    <script>
+        // --- 1. EXAMPLE BRANCH DATA ---
+        const activityData = {
+            social: {
+                situation: "you texted a friend a few hours ago and they haven't responded",
+                thought: "my friend doesn't like me",
+                quoteText1: "If you texted a friend a few hours ago and they haven't responded, you might think \"they don't like me.\" This thought might make you feel sad.",
+                quoteText2: "But wait! Do you know that this friend doesn't like you? Or is that an assumption?",
+                gamePrompt: "First, let's practice checking the evidence for this thought. Drag the evidence into the appropriate column depending on whether it supports or opposes the thought: \"my friend doesn't like me\".",
+                reviewContent: `
+                    <p class="review-item"><strong>"They are slow at replying to everyone"</strong><br>If your friend is generally slow at replying to everyone, this doesn't necessarily say anything about their feelings toward you.</p>
+                    <p class="review-item"><strong>"They often ask me to hang out"</strong><br>Most people wouldn't often ask you to hang out if they don't like you.</p>
+                    <p class="review-item"><strong>"They're at soccer practice right now"</strong><br>They may not have had a chance to reply yet.</p>
+                    <p class="review-item"><strong>"They sometimes ignore me when I text them"</strong><br>People sometimes ignore others if they don't like them. People also ignore others for other reasons, though, so it's important to consider other explanations.</p>
+                `,
+                conclusion: `
+                    <p class="conclusion-text">The evidence doesn't 100% support the thought that your friend doesn't like you. In fact, there is probably more evidence opposing the thought than supporting it.</p>
+                    <p class="conclusion-text">A more accurate summary of the evidence might be: <strong>"they just haven't gotten around to replying yet"</strong>.</p>
+                    <p class="conclusion-text">Reframing your thoughts like this can make you feel better!</p>
+                `,
+                fish: [
+                    { id: "s1", text: "They are slow at replying to everyone", type: "opposes", asset: "social-fish1.png" },
+                    { id: "s2", text: "They often ask me to hangout", type: "opposes", asset: "social-fish2.png" },
+                    { id: "s3", text: "They're at soccer practice right now", type: "opposes", asset: "social-fish3.png" },
+                    { id: "s4", text: "They sometimes ignore me when I text them", type: "supports", asset: "social-fish4.png" }
+                ]
+            },
+            academics: {
+                situation: "you did badly on the first test",
+                thought: "I'm going to fail this class",
+                quoteText1: "If you take a hard class and do badly on the first test, you might think \"I'm going to fail this class.\" This thought might make you feel sad or anxious.",
+                quoteText2: "But wait! Do you know you're going to fail the class? Or is that an assumption?",
+                gamePrompt: "First, let's practice checking the evidence for this thought. Drag the evidence into the appropriate column depending on whether it supports or opposes the thought: \"I'm going to fail this class\".",
+                reviewContent: `
+                    <p class="review-item"><strong>"You've passed hard classes before"</strong><br>If you've done it before, you can probably do it again!</p>
+                    <p class="review-item"><strong>"You can study differently in the future to remember the material better"</strong><br>This means there's a way to improve your grade.</p>
+                    <p class="review-item"><strong>"The first test is only worth 10% of your final grade"</strong><br>This one test has a pretty small impact on your overall grade.</p>
+                    <p class="review-item"><strong>"I thought I understood the material and I still did badly"</strong><br>It means you might struggle to accurately judge your own level of understanding.</p>
+                `,
+                conclusion: `
+                    <p class="conclusion-text">The evidence doesn't 100% support the thought that you're going to fail this class. In fact, there is probably more evidence opposing the thought than supporting it.</p>
+                    <p class="conclusion-text">A more accurate summary of the evidence might be: <strong>"I had a setback, and I can probably bounce back and pass the class"</strong>.</p>
+                    <p class="conclusion-text">Reframing your thoughts like this can make you feel better!</p>
+                `,
+                fish: [
+                    { id: "a1", text: "You've passed hard classes before", type: "opposes", asset: "fish1.png" },
+                    { id: "a2", text: "You can study differently in the future to remember the material better", type: "opposes", asset: "fish2.png" },
+                    { id: "a3", text: "The first test is worth only 10% of your final grade", type: "opposes", asset: "fish3.png" },
+                    { id: "a4", text: "I thought I understood the material and I still did badly", type: "supports", asset: "fish4.png" }
+                ]
+            }
+        };
+
+        // --- 2. GLOBAL STATE ---
+        let currentBranch = null;
+        let draggedElement = null;
+        const screensList = Array.from(document.querySelectorAll('.screen'));
+
+        // Personal State
+        let personalSupportFishes = [];
+        let personalOpposeFishes = [];
+
+        // --- 3. NAVIGATION ENGINE ---
+        function nextScreen(screenId) {
+            const currentScreen = document.querySelector('.screen.active');
+            const targetScreen = document.getElementById(screenId);
+
+            // Calculate deep-sea dive background progression
+            const targetIndex = screensList.indexOf(targetScreen);
+            const depthPercentage = (targetIndex / (screensList.length - 1)) * 100;
+            document.body.style.backgroundPosition = `center ${depthPercentage}%`;
+
+            // Transition logic
+            if (currentScreen && currentScreen !== targetScreen) {
+                currentScreen.classList.add('slide-out-up');
+                setTimeout(() => {
+                    currentScreen.classList.remove('active', 'slide-out-up');
+                    targetScreen.classList.add('active');
+                }, 350); 
+            } else {
+                targetScreen.classList.add('active');
+            }
+        }
+
+        function validateAndNext(inputId, nextId) {
+            const val = document.getElementById(inputId).value.trim();
+            if (val === '') {
+                alert("Please type an answer before continuing.");
+                return;
+            }
+            nextScreen(nextId);
+        }
+
+        // --- 4. EXAMPLE GAME LOGIC ---
+        function selectBranch(branch) {
+            currentBranch = branch;
+            const data = activityData[branch];
+            
+            document.getElementById('context-text-1').innerHTML = data.quoteText1;
+            document.getElementById('context-text-2').innerHTML = data.quoteText2;
+            document.getElementById('game-prompt').innerHTML = `<h2>${data.gamePrompt}</h2>`;
+            document.getElementById('review-situation').innerText = data.situation;
+            document.getElementById('review-thought').innerText = data.thought;
+            document.getElementById('review-text-container').innerHTML = data.reviewContent;
+            document.getElementById('reframe-conclusion').innerHTML = data.conclusion;
+
+            setupGame(data.fish);
+            nextScreen('screen-context-1');
+        }
+
+        function setupGame(fishData) {
+            const pool = document.getElementById('fish-pool');
+            const dropzones = document.querySelectorAll('.bucket-dropzone');
+            
+            pool.innerHTML = '';
+            dropzones.forEach(zone => {
+                zone.querySelector('.bucket-items').innerHTML = '';
+                zone.classList.remove('drag-over');
+            });
+
+            const shuffled = [...fishData].sort(() => Math.random() - 0.5);
+
+            shuffled.forEach(item => {
+                const fish = document.createElement('div');
+                fish.classList.add('fish');
+                fish.id = item.id;
+                fish.setAttribute('draggable', 'true');
+                fish.dataset.type = item.type;
+                fish.innerText = item.text;
+                fish.style.backgroundImage = `url('${item.asset}')`;
+
+                fish.addEventListener('dragstart', dragStart);
+                fish.addEventListener('dragend', dragEnd);
+                pool.appendChild(fish);
+            });
+
+            dropzones.forEach(zone => {
+                zone.addEventListener('dragover', dragOver);
+                zone.addEventListener('dragenter', dragEnter);
+                zone.addEventListener('dragleave', dragLeave);
+                zone.addEventListener('drop', dropElementToBucket);
+            });
+
+            pool.addEventListener('dragover', dragOver);
+            pool.addEventListener('dragenter', function(e) { e.preventDefault(); this.classList.add('drag-over'); });
+            pool.addEventListener('dragleave', function() { this.classList.remove('drag-over'); });
+            pool.addEventListener('drop', dropElementToPool);
+        }
+
+        function dragStart(e) { draggedElement = this; this.classList.add('dragged'); e.dataTransfer.setData('text/plain', this.id); }
+        function dragEnd() { this.classList.remove('dragged'); draggedElement = null; }
+        function dragOver(e) { e.preventDefault(); }
+        function dragEnter(e) { e.preventDefault(); this.classList.add('drag-over'); }
+        function dragLeave() { this.classList.remove('drag-over'); }
+
+        function dropElementToBucket(e) {
+            e.preventDefault();
+            this.classList.remove('drag-over');
+            if (draggedElement) this.querySelector('.bucket-items').appendChild(draggedElement);
+        }
+
+        function dropElementToPool(e) {
+            e.preventDefault();
+            this.classList.remove('drag-over');
+            if (draggedElement) this.appendChild(draggedElement);
+        }
+
+        function evaluateSorting() {
+            const poolContentsCount = document.getElementById('fish-pool').querySelectorAll('.fish').length;
+            if (poolContentsCount > 0) {
+                alert("Please drop all evidence fish into the buckets before submitting!");
+                return;
+            }
+            let misclassificationDetected = false;
+            document.querySelectorAll('.bucket-dropzone').forEach(zone => {
+                const expectedBucketType = zone.dataset.bucket;
+                const containedItems = zone.querySelectorAll('.fish');
+                containedItems.forEach(fish => {
+                    if (fish.dataset.type !== expectedBucketType) misclassificationDetected = true;
+                });
+            });
+
+            if (misclassificationDetected) nextScreen('screen-review');
+            else nextScreen('screen-reframe');
+        }
+
+        // --- 5. PERSONAL EXPERIENCE LOGIC ---
+        function preparePersonalGame() {
+            const val = document.getElementById('input-q5').value.trim();
+            if (val === '') { alert("Please type an answer before continuing."); return; }
+
+            const thought = document.getElementById('input-q4').value;
+            document.getElementById('display-thought-1').innerText = thought;
+            document.getElementById('display-thought-2').innerText = thought;
+
+            nextScreen('screen-q6');
+        }
+
+        function addPersonalFish(type) {
+            const inputEl = document.getElementById(type === 'support' ? 'input-support-fish' : 'input-oppose-fish');
+            const poolEl = document.getElementById(type === 'support' ? 'pool-support-fish' : 'pool-oppose-fish');
+            const arr = type === 'support' ? personalSupportFishes : personalOpposeFishes;
+
+            if (arr.length >= 5) {
+                alert('You can only add up to 5 fish!');
+                return;
+            }
+
+            const text = inputEl.value.trim();
+            if (!text) return;
+
+            const randomFishNum = Math.floor(Math.random() * 4) + 1;
+            
+            const fishObj = { text: text, asset: `fish${randomFishNum}.png` };
+            arr.push(fishObj);
+
+            const fishEl = document.createElement('div');
+            fishEl.className = 'fish';
+            fishEl.innerText = text;
+            fishEl.style.backgroundImage = `url('${fishObj.asset}')`;
+            poolEl.appendChild(fishEl);
+
+            inputEl.value = '';
+        }
+
+        function calculatePersonalResults() {
+            const supCount = personalSupportFishes.length;
+            const oppCount = personalOpposeFishes.length;
+
+            if (supCount === 0 && oppCount === 0) {
+                alert("Please add at least one piece of evidence before reviewing.");
+                return;
+            }
+
+            let targetPrefix = '';
+            let targetScreen = '';
+
+            if (supCount > oppCount) {
+                targetPrefix = '1';
+                targetScreen = 'screen-supports-intro';
+            } else if (supCount === oppCount) {
+                targetPrefix = '2';
+                targetScreen = 'screen-equal';
+            } else {
+                targetPrefix = '3';
+                targetScreen = 'screen-opposes';
+            }
+
+            const supContainer = document.getElementById(`display-supports-${targetPrefix}`);
+            const oppContainer = document.getElementById(`display-opposes-${targetPrefix}`);
+            supContainer.innerHTML = '';
+            oppContainer.innerHTML = '';
+
+            personalSupportFishes.forEach(f => {
+                const fishEl = document.createElement('div');
+                fishEl.className = 'fish';
+                fishEl.innerText = f.text;
+                fishEl.style.backgroundImage = `url('${f.asset}')`;
+                fishEl.style.transform = 'scale(0.85)'; 
+                fishEl.style.margin = '5px';
+                supContainer.appendChild(fishEl);
+            });
+
+            personalOpposeFishes.forEach(f => {
+                const fishEl = document.createElement('div');
+                fishEl.className = 'fish';
+                fishEl.innerText = f.text;
+                fishEl.style.backgroundImage = `url('${f.asset}')`;
+                fishEl.style.transform = 'scale(0.85)';
+                fishEl.style.margin = '5px';
+                oppContainer.appendChild(fishEl);
+            });
+
+            nextScreen(targetScreen);
+        }
+    </script>
+</body>
+</html>
