@@ -11,20 +11,23 @@
             --button-color: #24587a;
         }
 
-        /* Load custom font */
-        @font-face {
-            font-family: 'Slow Play';
-            src: url('slow-play.ttf') format('truetype');
-            font-weight: normal;
-            font-style: normal;
-        }
-
+        /* HIGHLY READABLE SYSTEM FONT UNIFORM ACROSS ALL TEXT */
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Slow Play', system-ui, -apple-system, sans-serif;
-            letter-spacing: 0.02em;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            letter-spacing: 0.01em;
+        }
+
+        /* ENSURE WHOLE HEADERS AND QUESTIONS ARE NOT BOLDED */
+        h2, h3, .bucket-label {
+            font-weight: normal;
+        }
+
+        /* BOLD RE-FOCUSED SOLELY ON SPECIFIC EMPHASIZED WORDS */
+        strong, b, u {
+            font-weight: 700;
         }
 
         body {
@@ -100,12 +103,12 @@
 
         /* Textbox Cards */
         .info-card {
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.94);
             border: 2px solid rgba(58,141,168,0.2);
             padding: 32px 40px;
             margin: 15px auto;
             border-radius: 14px;
-            font-size: 1.35rem;
+            font-size: 1.2rem;
             text-align: center;
             line-height: 1.6;
             color: var(--deep-blue);
@@ -114,8 +117,8 @@
             box-shadow: 0 8px 24px rgba(0,0,0,0.08);
         }
 
-        .info-card h2, h2 {
-            font-size: 1.8rem; 
+        .info-card h2 {
+            font-size: 1.65rem; 
             margin-bottom: 20px;
             line-height: 1.4;
             text-align: center;
@@ -124,7 +127,7 @@
 
         /* Review Formatting */
         .review-item {
-            font-size: 1.25rem;
+            font-size: 1.1rem;
             text-align: left;
             line-height: 1.5;
             color: var(--deep-blue);
@@ -133,11 +136,11 @@
 
         .review-item strong {
             color: var(--ocean-blue);
-            font-size: 1.35rem;
+            font-size: 1.15rem;
         }
 
         .conclusion-text {
-            font-size: 1.4rem;
+            font-size: 1.2rem;
             text-align: center;
             line-height: 1.6;
             color: var(--deep-blue);
@@ -158,11 +161,12 @@
             color: white;
             border: none;
             padding: 14px 40px;
-            font-size: 1.15rem; 
+            font-size: 1.1rem; 
             border-radius: 8px;
             cursor: pointer;
             transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
             box-shadow: 0 4px 12px rgba(36,88,122,0.2);
+            font-weight: 500;
         }
 
         button:hover {
@@ -187,19 +191,80 @@
             width: 100%;
             padding: 15px;
             border-radius: 10px;
-            border: 2px solid rgba(58,141,168,0.6);
-            font-size: 1.25rem; 
+            border: 2px solid rgba(58,141,168,0.5);
+            font-size: 1.1rem; 
             color: var(--deep-blue);
             margin-top: 15px;
             box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
             resize: vertical;
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.95);
             transition: border-color 0.2s;
         }
 
         .text-input:focus {
             outline: none;
             border-color: var(--deep-blue);
+        }
+
+        /* Custom Modal Box for Feelings Wheel */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(30, 61, 89, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 14px;
+            max-width: 520px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 12px 36px rgba(0,0,0,0.25);
+            position: relative;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: var(--ocean-blue);
+            line-height: 1;
+            transition: color 0.2s;
+        }
+
+        .modal-close:hover {
+            color: var(--deep-blue);
+        }
+
+        .modal-img {
+            max-width: 100%;
+            height: auto;
+            margin: 20px 0 10px 0;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
         /* Drag and Drop / Fish UI */
@@ -213,7 +278,7 @@
         .buckets-wrapper {
             display: flex;
             justify-content: center;
-            gap: 70px;
+            gap: 50px;
         }
 
         .bucket-container {
@@ -225,7 +290,7 @@
         }
 
         .bucket-label {
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             margin-bottom: 12px;
             color: var(--deep-blue);
             text-transform: uppercase;
@@ -281,11 +346,11 @@
         .fish-pool {
             display: flex;
             flex-wrap: wrap;
-            gap: 16px;
+            gap: 14px;
             justify-content: center;
-            min-height: 140px;
-            padding: 24px;
-            background: rgba(255, 255, 255, 0.4);
+            min-height: 130px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.45);
             border: 2px dashed rgba(30,61,89,0.2);
             border-radius: 12px;
             align-items: center;
@@ -293,7 +358,7 @@
         }
 
         .fish-pool.drag-over {
-            background: rgba(255, 255, 255, 0.6);
+            background: rgba(255, 255, 255, 0.65);
         }
 
         .fish {
@@ -307,18 +372,15 @@
             justify-content: center;
             padding: 12px 18px;
             text-align: center;
-            /* READABLE SAN-SERIF FONT FOR ALL FISH */
-            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            font-weight: 600;
             font-size: 0.85rem; 
-            letter-spacing: normal;
-            line-height: 1.2;
+            line-height: 1.3;
             color: #ffffff;
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8), -1px -1px 2px rgba(0, 0, 0, 0.8);
             transition: transform 0.15s ease, width 0.2s, height 0.2s;
+            font-weight: 500;
         }
 
         .fish:active {
@@ -337,11 +399,10 @@
             padding: 0;
         }
 
-        /* Review formatting rules */
         .review-meta {
             text-align: center;
             margin-bottom: 25px;
-            font-size: 1.4rem;
+            font-size: 1.2rem;
             color: var(--deep-blue);
             line-height: 1.6;
             border-bottom: 2px dashed rgba(30,61,89,0.15);
@@ -350,6 +411,7 @@
         
         .dynamic-quote {
             color: var(--button-color);
+            font-weight: 600;
         }
 
         .spacer {
@@ -510,7 +572,7 @@
             <div class="info-card">
                 <h2>How did this thought make you feel?</h2>
                 <textarea id="input-q5" class="text-input" rows="2" placeholder="e.g., Anxious, Sad, Frustrated..."></textarea>
-                <button class="btn-secondary" onclick="alert('Some examples of feelings:\n• Sad\n• Angry\n• Anxious\n• Frustrated\n• Lonely\n• Overwhelmed')">Click for help labeling how you feel</button>
+                <button class="btn-secondary" onclick="openModal()" style="margin-top: 15px;">Click for help labeling how you feel</button>
             </div>
             <div class="btn-container">
                 <button onclick="preparePersonalGame()">Continue</button>
@@ -519,9 +581,9 @@
 
         <div id="screen-q6" class="screen">
             <div class="info-card">
-                <p style="font-size: 1.3rem; margin-bottom: 10px;">Here is your thought: <span class="dynamic-quote">"<span id="display-thought-1"></span>"</span></p>
-                <h2>First, list the evidence that <u style="color: #d32f2f;">supports</u> this thought.</h2>
-                <p style="font-size: 1.2rem;">Write as many as you can think of! Make sure your evidence is based on facts, not emotions.</p>
+                <p style="font-size: 1.1rem; margin-bottom: 10px;">Here is your thought: <span class="dynamic-quote">"<span id="display-thought-1"></span>"</span></p>
+                <h2>First, list the evidence that <u>supports</u> this thought.</h2>
+                <p style="font-size: 1.05rem; color: #555; margin-top: 5px;">Write as many as you can think of! Make sure your evidence is based on facts, not emotions.</p>
                 
                 <div style="margin-top: 20px;">
                     <input type="text" id="input-support-fish" class="text-input" placeholder="Type supporting evidence...">
@@ -538,11 +600,11 @@
 
         <div id="screen-q7" class="screen">
             <div class="info-card">
-                <p style="font-size: 1.3rem; margin-bottom: 10px;">Here is your thought: <span class="dynamic-quote">"<span id="display-thought-2"></span>"</span></p>
-                <h2>Now list the evidence that <u style="color: #388e3c;">opposes</u> this thought.</h2>
+                <p style="font-size: 1.1rem; margin-bottom: 10px;">Here is your thought: <span class="dynamic-quote">"<span id="display-thought-2"></span>"</span></p>
+                <h2>Now list the evidence that <u>opposes</u> this thought.</h2>
                 
-                <div style="font-size: 1.2rem; text-align: left; line-height: 1.4; border-left: 4px solid var(--ocean-blue); padding-left: 15px; margin: 15px 0;">
-                    <p>Ask yourself these questions:</p>
+                <div style="font-size: 1.05rem; text-align: left; line-height: 1.5; border-left: 4px solid var(--ocean-blue); padding-left: 15px; margin: 15px 0; color: #444;">
+                    <p><strong>Ask yourself these questions:</strong></p>
                     <ul style="margin-left: 20px; margin-top: 5px;">
                         <li>Is there any other way of looking at this situation?</li>
                         <li>What would you tell a friend who had the thought?</li>
@@ -550,7 +612,7 @@
                     </ul>
                 </div>
                 
-                <p style="font-size: 1.1rem; margin-top: 10px;">It's harder for our brains to come up with evidence opposing our thoughts. That doesn't mean there isn't any; it's just harder to think of it. Write as many as you can think of!</p>
+                <p style="font-size: 1rem; margin-top: 10px; color: #555;">It's harder for our brains to come up with evidence opposing our thoughts. That doesn't mean there isn't any; it's just harder to think of it.</p>
 
                 <div style="margin-top: 20px;">
                     <input type="text" id="input-oppose-fish" class="text-input" placeholder="Type opposing evidence...">
@@ -570,11 +632,11 @@
                 <h2>You came up with more evidence supporting the thought than opposing it.</h2>
                 <div class="buckets-wrapper" style="margin-top: 25px;">
                     <div style="flex: 1;">
-                        <h3 style="color: #d32f2f;">Supports</h3>
+                        <h3 style="color: #d32f2f; margin-bottom: 10px;">Supports</h3>
                         <div class="fish-pool" id="display-supports-1" style="min-height: 80px; padding: 10px;"></div>
                     </div>
                     <div style="flex: 1;">
-                        <h3 style="color: #388e3c;">Opposes</h3>
+                        <h3 style="color: #388e3c; margin-bottom: 10px;">Opposes</h3>
                         <div class="fish-pool" id="display-opposes-1" style="min-height: 80px; padding: 10px;"></div>
                     </div>
                 </div>
@@ -587,6 +649,17 @@
         <div id="screen-supports-q8" class="screen">
             <div class="info-card">
                 <h2>Look at the evidence you provided. Does it fully support the thought?</h2>
+                
+                <div class="buckets-wrapper" style="margin-top: 25px; border-top: 2px dashed rgba(30,61,89,0.1); padding-top: 20px;">
+                    <div style="flex: 1;">
+                        <h3 style="color: #d32f2f; margin-bottom: 10px; font-size: 1.15rem;">Supports</h3>
+                        <div class="fish-pool" id="display-supports-q8" style="min-height: 80px; padding: 10px; background: rgba(255,255,255,0.5);"></div>
+                    </div>
+                    <div style="flex: 1;">
+                        <h3 style="color: #388e3c; margin-bottom: 10px; font-size: 1.15rem;">Opposes</h3>
+                        <div class="fish-pool" id="display-opposes-q8" style="min-height: 80px; padding: 10px; background: rgba(255,255,255,0.5);"></div>
+                    </div>
+                </div>
             </div>
             <div class="btn-container">
                 <button onclick="nextScreen('screen-supports-yes')">Yes</button>
@@ -597,7 +670,7 @@
         <div id="screen-supports-yes" class="screen">
             <div class="info-card" style="text-align: left;">
                 <h2 style="text-align: center;">Your negative thought isn't necessarily a reflection of your character or accurate on the whole.</h2>
-                <p>Here are some things you can do if the evidence supports your thought:</p>
+                <p style="margin-top: 10px;">Here are some things you can do if the evidence supports your thought:</p>
                 <ul style="margin-left: 25px; margin-top: 10px; line-height: 1.6;">
                     <li>Change your own behavior (e.g., consider putting your energy towards friends who support you)</li>
                     <li>Change how you're thinking about the thought (e.g., "maybe they don't like me, but that's a reflection of their character, not mine")</li>
@@ -625,11 +698,11 @@
                 <h2>You came up with an equal amount of evidence that supports and opposes the thought.</h2>
                 <div class="buckets-wrapper" style="margin-top: 25px;">
                     <div style="flex: 1;">
-                        <h3 style="color: #d32f2f;">Supports</h3>
+                        <h3 style="color: #d32f2f; margin-bottom: 10px;">Supports</h3>
                         <div class="fish-pool" id="display-supports-2" style="min-height: 80px; padding: 10px;"></div>
                     </div>
                     <div style="flex: 1;">
-                        <h3 style="color: #388e3c;">Opposes</h3>
+                        <h3 style="color: #388e3c; margin-bottom: 10px;">Opposes</h3>
                         <div class="fish-pool" id="display-opposes-2" style="min-height: 80px; padding: 10px;"></div>
                     </div>
                 </div>
@@ -644,11 +717,11 @@
                 <h2>You came up with more evidence opposing the thought than supporting it.</h2>
                 <div class="buckets-wrapper" style="margin-top: 25px;">
                     <div style="flex: 1;">
-                        <h3 style="color: #d32f2f;">Supports</h3>
+                        <h3 style="color: #d32f2f; margin-bottom: 10px;">Supports</h3>
                         <div class="fish-pool" id="display-supports-3" style="min-height: 80px; padding: 10px;"></div>
                     </div>
                     <div style="flex: 1;">
-                        <h3 style="color: #388e3c;">Opposes</h3>
+                        <h3 style="color: #388e3c; margin-bottom: 10px;">Opposes</h3>
                         <div class="fish-pool" id="display-opposes-3" style="min-height: 80px; padding: 10px;"></div>
                     </div>
                 </div>
@@ -671,7 +744,7 @@
         <div id="screen-email" class="screen">
             <div class="info-card">
                 <h2>Enter your email below to receive a copy of your responses.</h2>
-                <p style="font-size: 1.2rem;">We recommend you do this so you can refer back to them. Your email will only be used to email your responses (we promise!).</p>
+                <p style="font-size: 1.05rem; color: #555; margin-top: 5px;">We recommend you do this so you can refer back to them. Your email will only be used to email your responses.</p>
                 <input type="email" id="input-email" class="text-input" placeholder="Your email address...">
             </div>
             <div class="btn-container">
@@ -682,8 +755,21 @@
         <div class="spacer"></div>
     </div>
 
+    <div id="feelings-modal" class="modal-overlay" onclick="closeModalOnOutsideClick(event)">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal()">&times;</span>
+            <h3 style="color: var(--deep-blue); font-size: 1.4rem; margin-bottom: 5px;">Need help labeling how you feel?</h3>
+            <p style="font-size: 1rem; color: #555;">Use this wheel to help pinpoint exactly what you are experiencing.</p>
+            
+            <img src="feelings-wheel.png" alt="Feelings Wheel Diagram" class="modal-img">
+            
+            <div class="btn-container" style="margin-top: 15px;">
+                <button onclick="closeModal()" style="padding: 10px 30px; font-size: 1rem;">Close Window</button>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // --- 1. EXAMPLE BRANCH DATA ---
         const activityData = {
             social: {
                 situation: "you texted a friend a few hours ago and they haven't responded",
@@ -735,26 +821,36 @@
             }
         };
 
-        // --- 2. GLOBAL STATE ---
         let currentBranch = null;
         let draggedElement = null;
         const screensList = Array.from(document.querySelectorAll('.screen'));
 
-        // Personal State
         let personalSupportFishes = [];
         let personalOpposeFishes = [];
 
-        // --- 3. NAVIGATION ENGINE ---
+        /* Modal Visibility Methods */
+        function openModal() {
+            document.getElementById('feelings-modal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('feelings-modal').classList.remove('active');
+        }
+
+        function closeModalOnOutsideClick(e) {
+            if (e.target.id === 'feelings-modal') {
+                closeModal();
+            }
+        }
+
         function nextScreen(screenId) {
             const currentScreen = document.querySelector('.screen.active');
             const targetScreen = document.getElementById(screenId);
 
-            // Calculate deep-sea dive background progression
             const targetIndex = screensList.indexOf(targetScreen);
             const depthPercentage = (targetIndex / (screensList.length - 1)) * 100;
             document.body.style.backgroundPosition = `center ${depthPercentage}%`;
 
-            // Transition logic
             if (currentScreen && currentScreen !== targetScreen) {
                 currentScreen.classList.add('slide-out-up');
                 setTimeout(() => {
@@ -775,7 +871,6 @@
             nextScreen(nextId);
         }
 
-        // --- 4. EXAMPLE GAME LOGIC ---
         function selectBranch(branch) {
             currentBranch = branch;
             const data = activityData[branch];
@@ -868,7 +963,6 @@
             else nextScreen('screen-reframe');
         }
 
-        // --- 5. PERSONAL EXPERIENCE LOGIC ---
         function preparePersonalGame() {
             const val = document.getElementById('input-q5').value.trim();
             if (val === '') { alert("Please type an answer before continuing."); return; }
@@ -894,7 +988,6 @@
             if (!text) return;
 
             const randomFishNum = Math.floor(Math.random() * 4) + 1;
-            
             const fishObj = { text: text, asset: `fish${randomFishNum}.png` };
             arr.push(fishObj);
 
@@ -930,30 +1023,43 @@
                 targetScreen = 'screen-opposes';
             }
 
-            const supContainer = document.getElementById(`display-supports-${targetPrefix}`);
-            const oppContainer = document.getElementById(`display-opposes-${targetPrefix}`);
-            supContainer.innerHTML = '';
-            oppContainer.innerHTML = '';
+            const targets = {
+                '1': [document.getElementById('display-supports-1'), document.getElementById('display-opposes-1')],
+                '2': [document.getElementById('display-supports-2'), document.getElementById('display-opposes-2')],
+                '3': [document.getElementById('display-supports-3'), document.getElementById('display-opposes-3')]
+            };
 
-            personalSupportFishes.forEach(f => {
-                const fishEl = document.createElement('div');
-                fishEl.className = 'fish';
-                fishEl.innerText = f.text;
-                fishEl.style.backgroundImage = `url('${f.asset}')`;
-                fishEl.style.transform = 'scale(0.85)'; 
-                fishEl.style.margin = '5px';
-                supContainer.appendChild(fishEl);
-            });
+            Object.values(targets).forEach(pair => { if(pair[0]) pair[0].innerHTML = ''; if(pair[1]) pair[1].innerHTML = ''; });
+            
+            const q8Sup = document.getElementById('display-supports-q8');
+            const q8Opp = document.getElementById('display-opposes-q8');
+            if(q8Sup) q8Sup.innerHTML = '';
+            if(q8Opp) q8Opp.innerHTML = '';
 
-            personalOpposeFishes.forEach(f => {
-                const fishEl = document.createElement('div');
-                fishEl.className = 'fish';
-                fishEl.innerText = f.text;
-                fishEl.style.backgroundImage = `url('${f.asset}')`;
-                fishEl.style.transform = 'scale(0.85)';
-                fishEl.style.margin = '5px';
-                oppContainer.appendChild(fishEl);
-            });
+            function populatePool(fishDataArray, primaryContainer, fallbackContainer) {
+                fishDataArray.forEach(f => {
+                    const fishEl = document.createElement('div');
+                    fishEl.className = 'fish';
+                    fishEl.innerText = f.text;
+                    fishEl.style.backgroundImage = `url('${f.asset}')`;
+                    fishEl.style.transform = 'scale(0.85)'; 
+                    fishEl.style.margin = '2px';
+                    primaryContainer.appendChild(fishEl);
+
+                    if (fallbackContainer) {
+                        const cloneEl = fishEl.cloneNode(true);
+                        fallbackContainer.appendChild(cloneEl);
+                    }
+                });
+            }
+
+            if (targetPrefix === '1') {
+                populatePool(personalSupportFishes, targets['1'][0], q8Sup);
+                populatePool(personalOpposeFishes, targets['1'][1], q8Opp);
+            } else {
+                populatePool(personalSupportFishes, targets[targetPrefix][0], null);
+                populatePool(personalOpposeFishes, targets[targetPrefix][1], null);
+            }
 
             nextScreen(targetScreen);
         }
