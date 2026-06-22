@@ -381,6 +381,7 @@
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8), -1px -1px 2px rgba(0, 0, 0, 0.8);
             transition: transform 0.15s ease, width 0.2s, height 0.2s;
             font-weight: 500;
+            touch-action: none; /* Prevents touch panning/scrolling directly on fish */
         }
 
         .fish:active {
@@ -761,7 +762,7 @@
             <h3 style="color: var(--deep-blue); font-size: 1.4rem; margin-bottom: 5px;">Need help labeling how you feel?</h3>
             <p style="font-size: 1rem; color: #555;">Use this wheel to help pinpoint exactly what you are experiencing.</p>
             
-            <img src="feelings-wheel.png" alt="Feelings Wheel Diagram" class="modal-img">
+            <img src="feelings-wheel.jpg" alt="Feelings Wheel Diagram" class="modal-img">
             
             <div class="btn-container" style="margin-top: 15px;">
                 <button onclick="closeModal()" style="padding: 10px 30px; font-size: 1rem;">Close Window</button>
@@ -828,22 +829,27 @@
         let personalSupportFishes = [];
         let personalOpposeFishes = [];
 
+        // Global trackers for custom Mobile Touch Simulation
+        let touchOffsetX = 0;
+        let touchOffsetY = 0;
+        let originalParent = null;
+
         /* Modal Visibility Methods */
-        function openModal() {
+        window.openModal = function() {
             document.getElementById('feelings-modal').classList.add('active');
         }
 
-        function closeModal() {
+        window.closeModal = function() {
             document.getElementById('feelings-modal').classList.remove('active');
         }
 
-        function closeModalOnOutsideClick(e) {
+        window.closeModalOnOutsideClick = function(e) {
             if (e.target.id === 'feelings-modal') {
                 closeModal();
             }
         }
 
-        function nextScreen(screenId) {
+        window.nextScreen = function(screenId) {
             const currentScreen = document.querySelector('.screen.active');
             const targetScreen = document.getElementById(screenId);
 
@@ -862,7 +868,7 @@
             }
         }
 
-        function validateAndNext(inputId, nextId) {
+        window.validateAndNext = function(inputId, nextId) {
             const val = document.getElementById(inputId).value.trim();
             if (val === '') {
                 alert("Please type an answer before continuing.");
@@ -871,7 +877,7 @@
             nextScreen(nextId);
         }
 
-        function selectBranch(branch) {
+        window.selectBranch = function(branch) {
             currentBranch = branch;
             const data = activityData[branch];
             
@@ -908,8 +914,15 @@
                 fish.innerText = item.text;
                 fish.style.backgroundImage = `url('${item.asset}')`;
 
+                // Desktop Mouse Drag Events
                 fish.addEventListener('dragstart', dragStart);
                 fish.addEventListener('dragend', dragEnd);
+
+                // Mobile Touch Drag Events
+                fish.addEventListener('touchstart', handleTouchStart, { passive: false });
+                fish.addEventListener('touchmove', handleTouchMove, { passive: false });
+                fish.addEventListener('touchend', handleTouchEnd);
+
                 pool.appendChild(fish);
             });
 
@@ -926,8 +939,16 @@
             pool.addEventListener('drop', dropElementToPool);
         }
 
-        function dragStart(e) { draggedElement = this; this.classList.add('dragged'); e.dataTransfer.setData('text/plain', this.id); }
-        function dragEnd() { this.classList.remove('dragged'); draggedElement = null; }
+        /* Standard Mouse Desktop Handlers */
+        function dragStart(e) { 
+            draggedElement = this; 
+            this.classList.add('dragged'); 
+            e.dataTransfer.setData('text/plain', this.id); 
+        }
+        function dragEnd() { 
+            this.classList.remove('dragged'); 
+            draggedElement = null; 
+        }
         function dragOver(e) { e.preventDefault(); }
         function dragEnter(e) { e.preventDefault(); this.classList.add('drag-over'); }
         function dragLeave() { this.classList.remove('drag-over'); }
@@ -944,7 +965,93 @@
             if (draggedElement) this.appendChild(draggedElement);
         }
 
-        function evaluateSorting() {
+        /* Mobile Touch Drag Simulation Logic */
+        function handleTouchStart(e) {
+            draggedElement = this;
+            originalParent = this.parentNode;
+            this.classList.add('dragged');
+
+            const touch = e.touches[0];
+            const rect = this.getBoundingClientRect();
+            
+            touchOffsetX = touch.clientX - rect.left;
+            touchOffsetY = touch.clientY - rect.top;
+
+            // Pin dimensions explicitly during transition/drag view mapping
+            this.style.width = rect.width + 'px';
+            this.style.height = rect.height + 'px';
+            this.style.position = 'fixed';
+            this.style.zIndex = '10000';
+            this.style.pointerEvents = 'none'; // Allows finding drop targets beneath element
+
+            updateTouchPosition(touch.clientX, touch.clientY);
+        }
+
+        function handleTouchMove(e) {
+            if (!draggedElement) return;
+            e.preventDefault(); // Lock parent container context scrolling completely
+
+            const touch = e.touches[0];
+            updateTouchPosition(touch.clientX, touch.clientY);
+
+            const elementBelow = document.elementFromPoint(touch.clientX, touch.clientY);
+            
+            // Clean active dropzone highlights dynamically
+            document.querySelectorAll('.bucket-dropzone, #fish-pool').forEach(z => z.classList.remove('drag-over'));
+            
+            if (elementBelow) {
+                const targetZone = elementBelow.closest('.bucket-dropzone');
+                const targetPool = elementBelow.closest('#fish-pool');
+                if (targetZone) {
+                    targetZone.classList.add('drag-over');
+                } else if (targetPool) {
+                    targetPool.classList.add('drag-over');
+                }
+            }
+        }
+
+        function updateTouchPosition(clientX, clientY) {
+            draggedElement.style.left = (clientX - touchOffsetX) + 'px';
+            draggedElement.style.top = (clientY - touchOffsetY) + 'px';
+        }
+
+        function handleTouchEnd(e) {
+            if (!draggedElement) return;
+            draggedElement.classList.remove('dragged');
+
+            // Reset dynamic position styles cleanly
+            draggedElement.style.position = '';
+            draggedElement.style.zIndex = '';
+            draggedElement.style.left = '';
+            draggedElement.style.top = '';
+            draggedElement.style.width = '';
+            draggedElement.style.height = '';
+            draggedElement.style.pointerEvents = '';
+
+            const touch = e.changedTouches[0];
+            const elementBelow = document.elementFromPoint(touch.clientX, touch.clientY);
+
+            document.querySelectorAll('.bucket-dropzone, #fish-pool').forEach(z => z.classList.remove('drag-over'));
+
+            if (elementBelow) {
+                const targetZone = elementBelow.closest('.bucket-dropzone');
+                const targetPool = elementBelow.closest('#fish-pool');
+
+                if (targetZone) {
+                    targetZone.querySelector('.bucket-items').appendChild(draggedElement);
+                } else if (targetPool) {
+                    targetPool.appendChild(draggedElement);
+                } else {
+                    originalParent.appendChild(draggedElement);
+                }
+            } else {
+                originalParent.appendChild(draggedElement);
+            }
+
+            draggedElement = null;
+        }
+
+        window.evaluateSorting = function() {
             const poolContentsCount = document.getElementById('fish-pool').querySelectorAll('.fish').length;
             if (poolContentsCount > 0) {
                 alert("Please drop all evidence fish into the buckets before submitting!");
@@ -963,7 +1070,7 @@
             else nextScreen('screen-reframe');
         }
 
-        function preparePersonalGame() {
+        window.preparePersonalGame = function() {
             const val = document.getElementById('input-q5').value.trim();
             if (val === '') { alert("Please type an answer before continuing."); return; }
 
@@ -974,7 +1081,7 @@
             nextScreen('screen-q6');
         }
 
-        function addPersonalFish(type) {
+        window.addPersonalFish = function(type) {
             const inputEl = document.getElementById(type === 'support' ? 'input-support-fish' : 'input-oppose-fish');
             const poolEl = document.getElementById(type === 'support' ? 'pool-support-fish' : 'pool-oppose-fish');
             const arr = type === 'support' ? personalSupportFishes : personalOpposeFishes;
@@ -1000,7 +1107,7 @@
             inputEl.value = '';
         }
 
-        function calculatePersonalResults() {
+        window.calculatePersonalResults = function() {
             const supCount = personalSupportFishes.length;
             const oppCount = personalOpposeFishes.length;
 
