@@ -40,50 +40,18 @@
             position: relative;
             z-index: 2;
         }
-        .header-logo-container {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 30px;
-        }
-        .univ-logo {
-            max-width: 280px;
-            height: auto;
-            filter: invert(19%) sepia(27%) saturate(1638%) hue-rotate(193deg) brightness(93%) contrast(93%);
-        }
-        .screen {
-            display: none;
-            flex-direction: column;
-            justify-content: center;
-            flex-grow: 1;
-            opacity: 0;
-        }
-        .screen.active {
-            display: flex;
-            animation: slideInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-        .screen.slide-out-up {
-            display: flex;
-            animation: slideOutUp 0.35s cubic-bezier(0.5, 0, 0.2, 1) forwards;
-        }
-        @keyframes slideInUp {
-            from { opacity: 0; transform: scale(0.98) translateY(45px); }
-            to { opacity: 1; transform: scale(1) translateY(0); }
-        }
-        @keyframes slideOutUp {
-            from { opacity: 1; transform: scale(1) translateY(0); }
-            to { opacity: 0; transform: scale(0.98) translateY(-45px); }
-        }
+        .header-logo-container { display: flex; justify-content: center; margin-bottom: 30px; }
+        .univ-logo { max-width: 280px; height: auto; filter: invert(19%) sepia(27%) saturate(1638%) hue-rotate(193deg) brightness(93%) contrast(93%); }
+        .screen { display: none; flex-direction: column; justify-content: center; flex-grow: 1; opacity: 0; }
+        .screen.active { display: flex; animation: slideInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .screen.slide-out-up { display: flex; animation: slideOutUp 0.35s cubic-bezier(0.5, 0, 0.2, 1) forwards; }
+        @keyframes slideInUp { from { opacity: 0; transform: scale(0.98) translateY(45px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+        @keyframes slideOutUp { from { opacity: 1; transform: scale(1) translateY(0); } to { opacity: 0; transform: scale(0.98) translateY(-45px); } }
+        
         .info-card {
-            background: rgba(255, 255, 255, 0.94);
-            border: 2px solid rgba(58,141,168,0.2);
-            padding: 32px 40px;
-            margin: 15px auto;
-            border-radius: 14px;
-            font-size: 1.2rem;
-            text-align: center;
-            line-height: 1.6;
-            width: 100%;
-            max-width: 740px;
+            background: rgba(255, 255, 255, 0.94); border: 2px solid rgba(58,141,168,0.2);
+            padding: 32px 40px; margin: 15px auto; border-radius: 14px; font-size: 1.2rem;
+            text-align: center; line-height: 1.6; width: 100%; max-width: 740px;
             box-shadow: 0 8px 24px rgba(0,0,0,0.08);
         }
         .info-card h2 { font-size: 1.65rem; margin-bottom: 20px; line-height: 1.4; text-align: center; }
@@ -92,123 +60,44 @@
         .conclusion-text { font-size: 1.2rem; text-align: center; line-height: 1.6; margin-bottom: 18px; }
         .btn-container { display: flex; gap: 16px; justify-content: center; margin-top: 25px; flex-wrap: wrap; }
         button {
-            background-color: var(--button-color);
-            color: white;
-            border: none;
-            padding: 14px 40px;
-            font-size: 1.1rem; 
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-            box-shadow: 0 4px 12px rgba(36,88,122,0.2);
-            font-weight: 500;
+            background-color: var(--button-color); color: white; border: none; padding: 14px 40px;
+            font-size: 1.1rem; border-radius: 8px; cursor: pointer; transition: all 0.25s;
+            box-shadow: 0 4px 12px rgba(36,88,122,0.2); font-weight: 500;
         }
-        button:hover {
-            background-color: var(--ocean-blue);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 18px rgba(58,141,168,0.3);
-        }
+        button:hover { background-color: var(--ocean-blue); transform: translateY(-2px); box-shadow: 0 6px 18px rgba(58,141,168,0.3); }
+        button:disabled { background-color: #8faebd; cursor: not-allowed; transform: none; box-shadow: none; }
         .btn-secondary { background-color: transparent; color: var(--ocean-blue); border: 2px solid var(--ocean-blue); box-shadow: none; }
         .btn-secondary:hover { background-color: var(--ocean-blue); color: white; }
         .text-input {
-            width: 100%;
-            padding: 15px;
-            border-radius: 10px;
-            border: 2px solid rgba(58,141,168,0.5);
-            font-size: 1.1rem; 
-            margin-top: 15px;
-            box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
-            resize: vertical;
-            background: rgba(255, 255, 255, 0.95);
-            transition: border-color 0.2s;
+            width: 100%; padding: 15px; border-radius: 10px; border: 2px solid rgba(58,141,168,0.5);
+            font-size: 1.1rem; margin-top: 15px; box-shadow: inset 0 2px 5px rgba(0,0,0,0.05); resize: vertical;
+            background: rgba(255, 255, 255, 0.95); transition: border-color 0.2s;
         }
         .text-input:focus { outline: none; border-color: var(--deep-blue); }
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(30, 61, 89, 0.7);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
+        
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(30, 61, 89, 0.7); z-index: 1000; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.3s ease; }
         .modal-overlay.active { display: flex; opacity: 1; }
-        .modal-content {
-            background: #ffffff;
-            padding: 30px;
-            border-radius: 14px;
-            max-width: 520px;
-            width: 90%;
-            text-align: center;
-            box-shadow: 0 12px 36px rgba(0,0,0,0.25);
-            position: relative;
-            transform: scale(0.9);
-            transition: transform 0.3s ease;
-        }
+        .modal-content { background: #ffffff; padding: 30px; border-radius: 14px; max-width: 520px; width: 90%; text-align: center; box-shadow: 0 12px 36px rgba(0,0,0,0.25); transform: scale(0.9); transition: transform 0.3s ease; position: relative; }
         .modal-overlay.active .modal-content { transform: scale(1); }
-        .modal-close {
-            position: absolute;
-            top: 15px; right: 20px;
-            font-size: 1.8rem;
-            cursor: pointer;
-            color: var(--ocean-blue);
-            line-height: 1;
-        }
+        .modal-close { position: absolute; top: 15px; right: 20px; font-size: 1.8rem; cursor: pointer; color: var(--ocean-blue); }
         .modal-close:hover { color: var(--deep-blue); }
         .modal-img { max-width: 100%; height: auto; margin: 20px 0 10px 0; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        
         .game-container { display: flex; flex-direction: column; gap: 30px; margin-top: 10px; }
         .buckets-wrapper { display: flex; justify-content: center; gap: 50px; }
         .bucket-container { position: relative; width: 195px; display: flex; flex-direction: column; align-items: center; }
         .bucket-label { font-size: 1.3rem; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.05em; }
         .bucket-dropzone { position: relative; width: 100%; height: 195px; }
         .bucket-base, .bucket-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; pointer-events: none; }
-        .bucket-base { z-index: 1; }
-        .bucket-overlay { z-index: 3; }
-        .bucket-items {
-            position: absolute;
-            top: 35px; left: 15px; width: 165px; height: 135px;
-            z-index: 2;
-            display: flex;
-            flex-wrap: wrap;
-            align-content: center;
-            justify-content: center;
-            gap: 6px;
-        }
+        .bucket-base { z-index: 1; } .bucket-overlay { z-index: 3; }
+        .bucket-items { position: absolute; top: 35px; left: 15px; width: 165px; height: 135px; z-index: 2; display: flex; flex-wrap: wrap; align-content: center; justify-content: center; gap: 6px; }
         .bucket-dropzone.drag-over .bucket-base { filter: brightness(1.08) drop-shadow(0 0 12px rgba(58,141,168,0.5)); }
-        .fish-pool {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 14px;
-            justify-content: center;
-            min-height: 130px;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.45);
-            border: 2px dashed rgba(30,61,89,0.2);
-            border-radius: 12px;
-            align-items: center;
-        }
+        .fish-pool { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; min-height: 130px; padding: 20px; background: rgba(255, 255, 255, 0.45); border: 2px dashed rgba(30,61,89,0.2); border-radius: 12px; align-items: center; }
         .fish-pool.drag-over { background: rgba(255, 255, 255, 0.65); }
         .fish {
-            position: relative;
-            width: 160px;
-            height: 88px;
-            cursor: grab;
-            user-select: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 12px 18px;
-            text-align: center;
-            font-size: 0.85rem; 
-            line-height: 1.3;
-            color: #ffffff;
-            background: no-repeat center / contain;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8), -1px -1px 2px rgba(0, 0, 0, 0.8);
-            transition: transform 0.15s ease, width 0.2s, height 0.2s;
-            font-weight: 500;
-            touch-action: none;
+            position: relative; width: 160px; height: 88px; cursor: grab; user-select: none; display: flex; align-items: center; justify-content: center;
+            padding: 12px 18px; text-align: center; font-size: 0.85rem; line-height: 1.3; color: #ffffff; background: no-repeat center / contain;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8), -1px -1px 2px rgba(0, 0, 0, 0.8); transition: transform 0.15s ease, width 0.2s, height 0.2s; font-weight: 500; touch-action: none;
         }
         .fish:active { cursor: grabbing; }
         .fish.dragged { opacity: 0.25; }
@@ -425,7 +314,14 @@
                 <p style="font-size: 1.05rem; color: #555; margin-top: 5px;">We recommend you do this so you can refer back to them. Your email will only be used to email your responses.</p>
                 <input type="email" id="input-email" class="text-input" placeholder="Your email address...">
             </div>
-            <div class="btn-container"><button onclick="alert('Thank you for completing the Cognitive Restructuring Activity!')">Submit & Finish</button></div>
+            <div class="btn-container"><button id="submit-btn" onclick="submitSurveyData()">Submit & Finish</button></div>
+        </div>
+        
+        <div id="screen-thank-you" class="screen">
+            <div class="info-card">
+                <h2>Thank You!</h2>
+                <p>Your responses have been securely submitted. Great job practicing your cognitive restructuring skills today.</p>
+            </div>
         </div>
 
         <div class="spacer"></div>
@@ -442,6 +338,11 @@
     </div>
 
     <script>
+        // =========================================================
+        // GOOGLE APPS SCRIPT URL - PASTE YOUR URL HERE!
+        // =========================================================
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/a/macros/barnard.edu/s/AKfycbyqwJHWMurPiCSr92Aocl5jVL9ycD7IkzAmufb2B1s8I3HmcEOtS-QJcqTnuv2rnOX-/exec";
+
         const activityData = {
             social: {
                 situation: "you texted a friend a few hours ago and they haven't responded",
@@ -493,6 +394,18 @@
             }
         };
 
+        // --- Participant ID Generation ---
+        function getOrCreateParticipantId() {
+            let id = localStorage.getItem('participantId');
+            if (!id) {
+                id = 'USER-' + Math.random().toString(36).substr(2, 9);
+                localStorage.setItem('participantId', id);
+            }
+            return id;
+        }
+        const participantId = getOrCreateParticipantId();
+
+        // --- Core State ---
         let currentBranch = null, draggedElement = null, originalParent = null;
         let touchOffsetX = 0, touchOffsetY = 0;
         let personalSupportFishes = [], personalOpposeFishes = [];
@@ -541,11 +454,8 @@
 
             [...fishData].sort(() => Math.random() - 0.5).forEach(item => {
                 const fish = document.createElement('div');
-                fish.className = 'fish';
-                fish.id = item.id;
-                fish.setAttribute('draggable', 'true');
-                fish.dataset.type = item.type;
-                fish.innerText = item.text;
+                fish.className = 'fish'; fish.id = item.id; fish.setAttribute('draggable', 'true');
+                fish.dataset.type = item.type; fish.innerText = item.text;
                 fish.style.backgroundImage = `url('${item.asset}')`;
 
                 fish.addEventListener('dragstart', function(e) { draggedElement = this; this.classList.add('dragged'); e.dataTransfer.setData('text/plain', this.id); });
@@ -596,11 +506,8 @@
             const touch = e.changedTouches[0], el = document.elementFromPoint(touch.clientX, touch.clientY);
             document.querySelectorAll('.bucket-dropzone, #fish-pool').forEach(z => z.classList.remove('drag-over'));
             const zone = el ? (el.closest('.bucket-dropzone') || el.closest('#fish-pool')) : null;
-            if (zone) {
-                (zone.querySelector('.bucket-items') || zone).appendChild(draggedElement);
-            } else {
-                originalParent.appendChild(draggedElement);
-            }
+            if (zone) (zone.querySelector('.bucket-items') || zone).appendChild(draggedElement);
+            else originalParent.appendChild(draggedElement);
             draggedElement = null;
         }
 
@@ -669,6 +576,43 @@
                 btnContainer.innerHTML = '<button onclick="nextScreen(\'screen-outro\')">Continue</button>';
             }
             nextScreen('screen-personal-results');
+        };
+
+        // --- Final Data Submission to Google Sheets ---
+        window.submitSurveyData = function() {
+            const btn = document.getElementById('submit-btn');
+            btn.innerText = "Submitting...";
+            btn.disabled = true;
+
+            const extractText = arr => arr.map(fish => fish.text);
+
+            const surveyData = {
+                participantId: participantId,
+                email: document.getElementById('input-email').value.trim(),
+                situation: document.getElementById('input-q3').value.trim(),
+                thought: document.getElementById('input-q4').value.trim(),
+                feelings: document.getElementById('input-q5').value.trim(),
+                supportsCount: personalSupportFishes.length,
+                opposesCount: personalOpposeFishes.length,
+                supportEvidence: extractText(personalSupportFishes).join(' | '),
+                opposeEvidence: extractText(personalOpposeFishes).join(' | '),
+                adjustment: document.getElementById('input-adjustment') ? document.getElementById('input-adjustment').value.trim() : ""
+            };
+
+            // Send to Google Apps Script silently via no-cors mode
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(surveyData)
+            }).then(() => {
+                nextScreen('screen-thank-you');
+            }).catch(error => {
+                console.error("Error submitting:", error);
+                alert("There was an error submitting your responses. Please try again.");
+                btn.innerText = "Submit & Finish";
+                btn.disabled = false;
+            });
         };
     </script>
 </body>
